@@ -4,7 +4,6 @@ RUN apk add --no-cache python3 make g++ git
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY .npmrc* ./
 COPY certif/ ./certif/
 
 RUN npm ci --workspace=certif --include-workspace-root

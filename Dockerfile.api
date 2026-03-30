@@ -10,8 +10,7 @@ COPY api/ ./
 RUN npm install --production
 
 # Désactiver le validateur d'env vars (conçu pour l'infra Scalingo de Pix)
-RUN echo 'export default function validateEnvironmentVariables() { return; }' > src/shared/infrastructure/validate-environment-variables.js
-
+RUN echo 'export function validateEnvironmentVariables() { return; }' > src/shared/infrastructure/validate-environment-variables.js
 # .env avec les valeurs par défaut pour les configs internes
 RUN cat > .env << 'EOF'
 NODE_ENV=production

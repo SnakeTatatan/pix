@@ -8,12 +8,8 @@ services:
     restart: unless-stopped
     ports:
       - "3010:3000"
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=${DATABASE_URL}
-      - REDIS_URL=${REDIS_URL}
-      - LOG_LEVEL=info
-      - PORT=3000
+    env_file:
+      - .env
     networks:
       - pix-net
       - dokploy-network

@@ -1,0 +1,21 @@
+FROM node:22-alpine
+
+RUN apk add --no-cache python3 make g++ git
+
+WORKDIR /app
+
+# Copier les fichiers racine du monorepo (workspaces npm)
+COPY package.json package-lock.json .npmrc ./
+
+# Copier le code API
+COPY api/ ./api/
+
+# Installer les dépendances du workspace api
+RUN npm ci --workspace=api --include-workspace-root
+
+WORKDIR /app/api
+
+EXPOSE 3000
+
+# Migrations auto au démarrage + lancement serveur
+CMD ["sh", "-c", "npx knex migrate:latest --knexfile src/db/knexfile.js && node src/main.js"]

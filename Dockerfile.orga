@@ -8,8 +8,9 @@ COPY . .
 RUN npm ci
 
 WORKDIR /app/orga
+RUN npm install
 
-ARG API_HOST=https://api.pix.ethannas.fr
+ARG API_HOST=https://api.pix.mathesciences.fr
 ENV API_HOST=${API_HOST}
 
 RUN npx ember build --environment=production

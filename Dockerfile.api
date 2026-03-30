@@ -9,8 +9,9 @@ COPY . .
 RUN npm ci
 
 WORKDIR /app/api
+RUN npm install
 
-# Créer le .env avec les valeurs par défaut requises par Pix
+# .env avec les valeurs par défaut Pix
 RUN cat > .env << 'EOF'
 AUTONOMOUS_COURSES_ORGANIZATION_ID=1
 SCO_ACCOUNT_RECOVERY_KEY_LIFETIME_MINUTES=1440

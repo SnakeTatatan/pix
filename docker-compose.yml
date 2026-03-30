@@ -1,0 +1,85 @@
+services:
+
+  # ── API (Hapi.js — le coeur) ───────────────────────────
+  pix-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - LOG_LEVEL=info
+      - PORT=3000
+    networks:
+      - pix-net
+      - dokploy-network
+
+  # ── mon-pix (élèves) ──────────────────────────────────
+  mon-pix:
+    build:
+      context: .
+      dockerfile: Dockerfile.monpix
+      args:
+        API_HOST: ${API_HOST}
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - pix-api
+    networks:
+      - pix-net
+
+  # ── Orga (organisations) ──────────────────────────────
+  pix-orga:
+    build:
+      context: .
+      dockerfile: Dockerfile.orga
+      args:
+        API_HOST: ${API_HOST}
+    restart: unless-stopped
+    ports:
+      - "4201:80"
+    depends_on:
+      - pix-api
+    networks:
+      - pix-net
+
+  # ── Admin ─────────────────────────────────────────────
+  pix-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+      args:
+        API_HOST: ${API_HOST}
+    restart: unless-stopped
+    ports:
+      - "4202:80"
+    depends_on:
+      - pix-api
+    networks:
+      - pix-net
+
+  # ── Certif ────────────────────────────────────────────
+  pix-certif:
+    build:
+      context: .
+      dockerfile: Dockerfile.certif
+      args:
+        API_HOST: ${API_HOST}
+    restart: unless-stopped
+    ports:
+      - "4203:80"
+    depends_on:
+      - pix-api
+    networks:
+      - pix-net
+
+networks:
+  pix-net:
+    driver: bridge
+  dokploy-network:
+    external: true

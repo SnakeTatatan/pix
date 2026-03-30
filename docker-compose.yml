@@ -11,7 +11,7 @@ services:
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://pix:sTIa3KWZDFayP1UjbGaK@pix-pixdb-nymm1w:5432/pix
-      - REDIS_URL=redis://pix-pixredis-TONHASH:6379
+      - REDIS_URL=redis://default:h77wgwjvalctwajc@pix-redis-v8zdvr:6379
       - AUTH_SECRET=e9c4f8a2b7d1c3e5f6a8b9d0e2f4c6a7b8d1e3f5a7c9b0d2e4f6a8c1b3d5e7f9
       - LOG_LEVEL=info
       - PORT=3000

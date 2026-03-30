@@ -1,17 +1,17 @@
 FROM node:24-alpine
 
-RUN apk add --no-cache python3 make g++ git
+RUN apk add --no-cache python3 make g++ git bash
 
 WORKDIR /app
 
-# Copier tout le monorepo (npm workspaces exige toute l'arborescence)
 COPY . .
 
-# Installer toutes les dépendances
 RUN npm ci
 
 WORKDIR /app/api
-RUN npm install
+
+# Générer le .env par défaut via le script officiel Pix
+RUN cd /app && bash scripts/configure.sh || true
 
 EXPOSE 3000
 

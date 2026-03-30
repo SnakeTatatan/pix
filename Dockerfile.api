@@ -4,15 +4,18 @@ RUN apk add --no-cache python3 make g++ git
 
 WORKDIR /app
 
-COPY . .
+# Copier UNIQUEMENT le dossier api (comme Scalingo fait)
+COPY api/package.json api/package-lock.json* ./
 
-RUN npm ci
+# Copier tout le code API
+COPY api/ ./
 
-WORKDIR /app/api
-RUN npm install
+# Installer les dépendances (dans /app/node_modules, là où le code les cherche)
+RUN npm install --production
 
-# .env avec les valeurs par défaut Pix
+# Créer le .env avec TOUTES les valeurs par défaut nécessaires
 RUN cat > .env << 'EOF'
+NODE_ENV=development
 AUTONOMOUS_COURSES_ORGANIZATION_ID=1
 SCO_ACCOUNT_RECOVERY_KEY_LIFETIME_MINUTES=1440
 FT_ALWAYS_OK_VALIDATE_NEXT_CHALLENGE_ENDPOINT=false
@@ -22,9 +25,13 @@ PIX_AREA_REGEX_PATTERN=^[0-9]\.
 PIX_AREA_PREFIX_FOR_FR_LOCALE=
 TLD_FR=fr
 TLD_ORG=org
-DOMAIN_PIX_FR=https://pix.fr
-DOMAIN_PIX_ORG=https://pix.org
-DOMAIN_PIX_APP=https://app.pix.fr
+DOMAIN_PIX_FR=https://pix.mathesciences.fr
+DOMAIN_PIX_ORG=https://pix.mathesciences.fr
+DOMAIN_PIX_APP=https://pix.mathesciences.fr
+PIX_APP_DOMAIN=pix.mathesciences.fr
+DATABASE_URL=unused-will-be-overridden
+REDIS_URL=unused-will-be-overridden
+AUTH_SECRET=unused-will-be-overridden
 EOF
 
 EXPOSE 3000

@@ -15,4 +15,4 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx knex migrate:latest --knexfile src/db/knexfile.js && node src/main.js"]
+CMD ["npm", "start"]

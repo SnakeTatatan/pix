@@ -1,6 +1,6 @@
 FROM node:24-alpine
 
-RUN apk add --no-cache python3 make g++ git bash
+RUN apk add --no-cache python3 make g++ git
 
 WORKDIR /app
 
@@ -10,8 +10,21 @@ RUN npm ci
 
 WORKDIR /app/api
 
-# Générer le .env par défaut via le script officiel Pix
-RUN cd /app && bash scripts/configure.sh || true
+# Créer le .env avec les valeurs par défaut requises par Pix
+RUN cat > .env << 'EOF'
+AUTONOMOUS_COURSES_ORGANIZATION_ID=1
+SCO_ACCOUNT_RECOVERY_KEY_LIFETIME_MINUTES=1440
+FT_ALWAYS_OK_VALIDATE_NEXT_CHALLENGE_ENDPOINT=false
+LCMS_API_KEY=not-used
+LCMS_API_URL=https://lcms-api.pix.fr/api
+PIX_AREA_REGEX_PATTERN=^[0-9]\.
+PIX_AREA_PREFIX_FOR_FR_LOCALE=
+TLD_FR=fr
+TLD_ORG=org
+DOMAIN_PIX_FR=https://pix.fr
+DOMAIN_PIX_ORG=https://pix.org
+DOMAIN_PIX_APP=https://app.pix.fr
+EOF
 
 EXPOSE 3000
 
